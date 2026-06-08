@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -27,8 +29,15 @@ public class UserController {
         System.out.println("User List: " + users);
         return "hello";
     }
+
+    @RequestMapping("/admin/user")
+    public String getAllUsers(){
+        List<User> users = this.userService.getAllUsers();
+        System.out.println("All Users: " + users);
+        return "admin/user/users";
+    }
     
-    @RequestMapping("/admin/user/create")
+    @RequestMapping("/admin/user/create") //method GET
     public String getCreateUser(Model model){
         model.addAttribute("newUser", new User());
         return "admin/user/create";
