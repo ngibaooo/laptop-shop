@@ -30,11 +30,13 @@ public class UserController {
         return "hello";
     }
 
-    @RequestMapping("/admin/user")
-    public String getAllUsers(){
+    @RequestMapping("/admin/users")
+    public String getAllUsers(Model model){
         List<User> users = this.userService.getAllUsers();
         System.out.println("All Users: " + users);
-        return "admin/user/users";
+        // model đùng dể truyền biến users: gồm tất cả user mà nhận được từ repo query trong db qua cho biến users_list
+        model.addAttribute("users_list", users);
+        return "admin/user/users_list";
     }
     
     @RequestMapping("/admin/user/create") //method GET
@@ -45,7 +47,7 @@ public class UserController {
     @RequestMapping(value="/admin/user/create", method=RequestMethod.POST)
     public String createUser(Model model, @ModelAttribute("newUser") User bao) {
         this.userService.handleSaveUser(bao);
-        return "hello";
+        return "redirect:/admin/users";
     }
     
 }
