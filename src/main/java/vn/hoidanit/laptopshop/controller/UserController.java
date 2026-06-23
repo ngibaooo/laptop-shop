@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,6 +60,27 @@ public class UserController {
         this.userService.handleSaveUser(bao);
         return "redirect:/admin/users";
     }
+
+    @RequestMapping("/admin/user/update/{id}")
+    public String getUpdateUser(Model model, @PathVariable long id) {
+        User currentUser = this.userService.getUserById(id);
+        model.addAttribute("currentUser", currentUser);
+        return "/admin/user/update";
+    }
+    @PostMapping("/admin/user/update")
+    public String updateUser(Model model, @ModelAttribute("currentUser") User bao) {
+        User currentUser = this.userService.getUserById(bao.getId()); //currentUser là user thật hiện tại được lấy từ database
+                                                                    //bao là user được lấy từ form nhập dữ liệu ở giao diện frontend
+        if(currentUser != null){ //nếu repo tìm thấy user có id đó trong database thì set các data hiện tại của user thành data được nhập ở form update
+            // currentUser.setEmail(bao.getEmail()); //do email bị disabled nên không cần update nó. Mặc định là data hiện tại
+            currentUser.setPhone(bao.getPhone());
+            currentUser.setFullName(bao.getFullName());
+            currentUser.setAddress(bao.getAddress());            
+        }
+        this.userService.handleSaveUser(currentUser);                  
+        return "redirect:/admin/users";
+    }
+    
     
 }
 
