@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
     // User save(User bao); Không cần nữa vì Jpa đã có sẵn hàm save()
+    void deleteById(long id);
     List<User> findByEmail(String email);
     User findById(long id);
 }
